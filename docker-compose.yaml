@@ -1,0 +1,29 @@
+version: '3'
+services:
+  blogservice:
+    image: chiefash/blogservice:1.0
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    environment:
+      - DB_URI=mongodb://admin:root@db:27017
+  db:
+    image: mongo
+    ports:
+      - 27000:27017
+    volumes:
+      - ./mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=root
+  mongoexpress:
+    image: mongo-express
+    ports:
+      - 8080:8081
+    depends_on:
+      - db 
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=root
+      - ME_CONFIG_MONGODB_SERVER=db
